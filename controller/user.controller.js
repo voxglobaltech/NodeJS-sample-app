@@ -63,15 +63,36 @@ const updateUser = async (req, res) => {
   }
 };
 
+const getUserByEmail = async (req, res) => {
+  try {
+    const email = req.params.id;
+    const user = await User.findOne({ email });
+    console.log("user", user);
+    if (user.length === 0) {
+      res.status(404).json({ message: "No user found" });
+    } else {
+      res
+        .status(200)
+        .json({ message: "User retrieved successfully", data: user });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 const updateUserPatch = async (req, res) => {
   console.log("req.params.id", req.params.id);
   console.log("req.body", req.body);
   try {
-    const updatedUser =  await User.findByIdAndUpdate(req.params.id, {
-     firstName: req.body.firstName, 
-    },{new:true});
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        firstName: req.body.firstName,
+      },
+      { new: true }
+    );
 
-    console.log('updatedUser',updatedUser)
+    console.log("updatedUser", updatedUser);
     if (!updatedUser) {
       res.status(404).json({ message: "user Not Found" });
     }
@@ -85,19 +106,17 @@ const updateUserPatch = async (req, res) => {
   }
 };
 
-const deleteUser = async (req, res) => {  
+const deleteUser = async (req, res) => {
   try {
     const deletedUser = await User.findByIdAndDelete(req.params.id);
     if (!deletedUser) {
       res.status(404).json({ message: "No user found" });
     }
-    res
-     .status(200)
-     .json({ message: "User deleted successfully"});
+    res.status(200).json({ message: "User deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
   }
-}
+};
 
 module.exports = {
   createUser,
@@ -105,5 +124,6 @@ module.exports = {
   getUserById,
   updateUser,
   updateUserPatch,
-  deleteUser
+  deleteUser,
+  getUserByEmail,
 };

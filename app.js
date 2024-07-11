@@ -1,8 +1,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
- const CONNECTDB =require( './config.js/dbconfig')
-const userRouter=require('./routes/user.routes')
+const CONNECTDB = require("./config.js/dbconfig");
+const userRouter = require("./routes/user.routes");
+const productRouter = require("./routes/product.routes");
 const app = express();
 const PORT = 8080;
 
@@ -10,10 +11,10 @@ app.use(bodyParser.json());
 
 app.use(cors());
 
-app.use('/user',userRouter)
-
+app.use("/user", userRouter);
+app.use("/product", productRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-  CONNECTDB()
+  CONNECTDB();
 });
